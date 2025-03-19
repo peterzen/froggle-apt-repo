@@ -1,7 +1,8 @@
 # Define variables
 PACKAGE_NAME = froggle-certs
 DEB_DIR = src/$(PACKAGE_NAME)
-DEB_FILE = incoming/$(PACKAGE_NAME).deb
+BUILD_DIR = build
+DEB_FILE = $(BUILD_DIR)/$(PACKAGE_NAME).deb
 DISTRIBUTION = bookworm
 DIST_ROOT = dists/$(DISTRIBUTION)
 
@@ -10,6 +11,8 @@ all: build
 
 # Build the .deb package
 build:
+	rm -rf $(BUILD_DIR)
+	mkdir $(BUILD_DIR)
 	dpkg-deb --build $(DEB_DIR) $(DEB_FILE)
 
 # Add the package to the repository using reprepro
@@ -29,4 +32,4 @@ all: build preprepo sign clean
 
 # Clean up (optional)
 clean:
-	rm -rf $(DEB_FILE)
+	rm -rf $(DEB_FILE) $(BUILD_DIR)

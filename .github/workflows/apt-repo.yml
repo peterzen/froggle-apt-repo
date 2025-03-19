@@ -14,6 +14,7 @@ env:
   CODENAME: bookworm
   COMPONENTS: main
   ARCHITECTURES: amd64 arm64
+  BUILD_DIR: build
 
 jobs:
   build:
@@ -26,11 +27,13 @@ jobs:
         uses: actions/checkout@v4
       - name: Setup Pages
         uses: actions/configure-pages@v4
+      # - name: Install build tools
+      #   uses: ConorMacBride/install-package@v1
+      #   with:
+      #     apt: 
       - name: Create packages
         run: |
-          ...
-          do something funny to create your packages using e.g. fpm, nfpm, ....
-          ...
+          dpkg-deb --build ${{ env.BUILD_DIR }}/froggle-certs ${{ env.BUILD_DIR }}/froggle-certs.deb
       - uses: morph027/apt-repo-action@v2
         id: create-apt-repo
         with:
