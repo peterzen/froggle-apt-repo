@@ -3,6 +3,7 @@ PACKAGE_NAME = froggle-certs
 DEB_DIR = src/$(PACKAGE_NAME)
 DEB_FILE = incoming/$(PACKAGE_NAME).deb
 DISTRIBUTION = bookworm
+DIST_ROOT = dists/$(DISTRIBUTION)
 
 # Default target
 all: build
@@ -19,7 +20,12 @@ preprepo:
 		--priority 0 \
 		includedeb $(DISTRIBUTION) $(DEB_FILE)
 
-all: build preprepo clean
+sign:
+	gpg --default-key 8A2F51D138155F46 \
+	--output $(DIST_ROOT)/InRelease \
+	--clearsign $(DIST_ROOT)/Release
+
+all: build preprepo sign clean
 
 # Clean up (optional)
 clean:
