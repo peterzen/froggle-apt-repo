@@ -1,0 +1,20 @@
+Origin: Froggle
+Label: Foo Github
+Suite: stable
+Codename: bookworm
+Date: Thu, 20 Mar 2025 14:32:23 UTC
+Architectures: amd64
+Components: main
+Description: FROGGLE APT repo
+MD5Sum:
+ c47e01a9e45cd97adc2c522cebd85709 382 main/binary-amd64/Packages
+ 788fc7e4349b13fd0697f73b809a659f 297 main/binary-amd64/Packages.gz
+ 5be2d7bcf89239d632e27de57d6d01ba 116 main/binary-amd64/Release
+SHA1:
+ c565168336ac0484ff418372a433552898b1f120 382 main/binary-amd64/Packages
+ 1478eea15afd97fe8b84b8ba53f958f5550cdb60 297 main/binary-amd64/Packages.gz
+ d91a653ad6d2e7f885eca43ef68610a3c9840fbc 116 main/binary-amd64/Release
+SHA256:
+ c77470310f36c2970fb689bd61ec496b245b1946fef3b6a194a64b907109d38b 382 main/binary-amd64/Packages
+ 3ed1ca32602729e4840d8322dbcf5adbbbf10281cfe557b21d61ff86ab101022 297 main/binary-amd64/Packages.gz
+ 40be0ac946331a8065b41ea45185ba8259c3b220a7a57eddb0dee94b0a409c5a 116 main/binary-amd64/Release
