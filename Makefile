@@ -19,7 +19,7 @@ preprepo:
 		--priority 0 \
 		includedeb $(DISTRIBUTION) $(DEB_FILE)
 
-all: build preprepo
+all: build preprepo clean
 
 # Clean up (optional)
 clean:
