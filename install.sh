@@ -13,3 +13,4 @@ wget -O- "$REPO_URL/pubkey.asc" | gpg --dearmor | sudo tee "$APT_KEY" > /dev/nul
 sudo chmod 644 "$APT_KEY"
 
 echo "deb [signed-by=$APT_KEY] $REPO_URL bookworm main" | sudo tee /etc/apt/sources.list.d/froggle.list
+sudo apt update
