@@ -1,0 +1,8 @@
+Package: froggle-certs
+Version: 1.1
+Section: misc
+Priority: optional
+Architecture: all
+Maintainer: user <user@froggle.org>
+Description: FROGGLE CA certs
+
