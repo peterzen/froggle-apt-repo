@@ -33,6 +33,7 @@ jobs:
       #     apt: 
       - name: Create packages
         run: |
+          mkdir build
           dpkg-deb --build ${{ env.BUILD_DIR }}/froggle-certs ${{ env.BUILD_DIR }}/froggle-certs.deb
       - uses: morph027/apt-repo-action@v2
         id: create-apt-repo

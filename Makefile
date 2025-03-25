@@ -32,4 +32,4 @@ all: build preprepo sign clean
 
 # Clean up (optional)
 clean:
-	rm -rf $(DEB_FILE) $(BUILD_DIR)
+	rm -rf $(DEB_FILE) 
