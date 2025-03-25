@@ -38,7 +38,7 @@ jobs:
           signing-key: ${{ secrets.SIGNING_KEY }}
           codename: ${{ env.CODENAME }}
           components: ${{ env.COMPONENTS }}
-          architectures: ${{ env.ARCHITECTURES }}
+          architectures: amd64 arm64
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
