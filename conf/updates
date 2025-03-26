@@ -1,0 +1,20 @@
+# Debian main archive
+Name: debian-bookworm
+Suite: bookworm
+Method: http://deb.debian.org/debian
+Components: main contrib non-free non-free-firmware
+Architectures: amd64
+
+# Debian security archive
+Name: debian-bookworm-security
+Suite: bookworm-security
+Method: http://security.debian.org/debian-security
+Components: main contrib non-free non-free-firmware
+Architectures: amd64
+
+# Bookworm updates
+Name: debian-bookworm-updates
+Suite: bookworm-updates
+Method: http://deb.debian.org/debian
+Components: main contrib non-free non-free-firmware
+Architectures: amd64

@@ -3,9 +3,8 @@ PACKAGE_NAME = froggle-certs
 DEB_DIR = src/$(PACKAGE_NAME)
 BUILD_DIR = build
 DEB_FILE = $(BUILD_DIR)/$(PACKAGE_NAME).deb
-DISTRIBUTION = froggle
+DISTRIBUTION = bookworm
 DIST_ROOT = dists/$(DISTRIBUTION)
-STORAGE_ROOT = /storage/repos
 
 # Default target
 .PHONY: all build preprepo sign clean
