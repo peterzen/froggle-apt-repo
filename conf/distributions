@@ -1,7 +1,7 @@
 Origin: Froggle
 Label: Foo Github
 Suite: stable
-Codename: bookworm
+Codename: froggle
 Architectures: amd64
 Components: main
 Description: FROGGLE APT repo
