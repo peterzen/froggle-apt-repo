@@ -1,0 +1,65 @@
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA512
+
+Origin: Debian
+Label: Debian
+Suite: bookworm
+Codename: bookworm
+Date: Sun, 30 Mar 2025 17:07:10 UTC
+Architectures: amd64
+Components: main contrib non-free non-free-firmware
+MD5Sum:
+ c52ddc0c2c97ee771fb3e287fc154883 389 main/binary-amd64/Packages
+ 0f206aca3cd905c4666d587832f7764e 303 main/binary-amd64/Packages.gz
+ 31fec1bce69039830a337cbd02175af6 83 main/binary-amd64/Release
+ d41d8cd98f00b204e9800998ecf8427e 0 contrib/binary-amd64/Packages
+ 7029066c27ac6f5ef18d660d5741979a 20 contrib/binary-amd64/Packages.gz
+ 9591e692a63bcd2fb02a1d0b20920e96 86 contrib/binary-amd64/Release
+ d41d8cd98f00b204e9800998ecf8427e 0 non-free/binary-amd64/Packages
+ 7029066c27ac6f5ef18d660d5741979a 20 non-free/binary-amd64/Packages.gz
+ a9908d37beb15237e50a3824422c5910 87 non-free/binary-amd64/Release
+ d41d8cd98f00b204e9800998ecf8427e 0 non-free-firmware/binary-amd64/Packages
+ 7029066c27ac6f5ef18d660d5741979a 20 non-free-firmware/binary-amd64/Packages.gz
+ 3164506101221ed102104f70e69b5aa1 96 non-free-firmware/binary-amd64/Release
+SHA1:
+ c892c2193131c90c31aeb262c942b543096674f3 389 main/binary-amd64/Packages
+ 40ca0e8c8713f14920c214e640fdd14e5b85c4e1 303 main/binary-amd64/Packages.gz
+ 1c7da03515ca136e2f12f2c87cc3fb7b7786159e 83 main/binary-amd64/Release
+ da39a3ee5e6b4b0d3255bfef95601890afd80709 0 contrib/binary-amd64/Packages
+ 46c6643f07aa7f6bfe7118de926b86defc5087c4 20 contrib/binary-amd64/Packages.gz
+ 7ca11ff7d63cafa64b5c82d9d8710733c756dcbb 86 contrib/binary-amd64/Release
+ da39a3ee5e6b4b0d3255bfef95601890afd80709 0 non-free/binary-amd64/Packages
+ 46c6643f07aa7f6bfe7118de926b86defc5087c4 20 non-free/binary-amd64/Packages.gz
+ 5c389d34f08d2a57b80e38076dfa71947d0a0966 87 non-free/binary-amd64/Release
+ da39a3ee5e6b4b0d3255bfef95601890afd80709 0 non-free-firmware/binary-amd64/Packages
+ 46c6643f07aa7f6bfe7118de926b86defc5087c4 20 non-free-firmware/binary-amd64/Packages.gz
+ 39af05ffccdcc9da5510e77575dc5d74435375bf 96 non-free-firmware/binary-amd64/Release
+SHA256:
+ 690b883f3e2e1dfd48782a172e293c02e58af2d34a33373cd49513db94b36ef9 389 main/binary-amd64/Packages
+ 0e375ec857409af7a2ef7768a6adc43db07f1b7c096895a804c785eb27d1c6e7 303 main/binary-amd64/Packages.gz
+ 347edc45f81aae39cc015789b626ea826fcc62e8bda39903e7e6f94473459b80 83 main/binary-amd64/Release
+ e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 0 contrib/binary-amd64/Packages
+ 59869db34853933b239f1e2219cf7d431da006aa919635478511fabbfc8849d2 20 contrib/binary-amd64/Packages.gz
+ 9c11fd72384c6fa11e5fc30223068ce8c09ae254f0de0dc82abe916932d4807e 86 contrib/binary-amd64/Release
+ e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 0 non-free/binary-amd64/Packages
+ 59869db34853933b239f1e2219cf7d431da006aa919635478511fabbfc8849d2 20 non-free/binary-amd64/Packages.gz
+ 03e7980def79177ea9008fd0572957383f0e156de62ef24e06ef962d00d8267b 87 non-free/binary-amd64/Release
+ e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 0 non-free-firmware/binary-amd64/Packages
+ 59869db34853933b239f1e2219cf7d431da006aa919635478511fabbfc8849d2 20 non-free-firmware/binary-amd64/Packages.gz
+ b456f51f0d362efd7bf38717a294676bd2a4025f526a479f8ab67c7f1703e97c 96 non-free-firmware/binary-amd64/Release
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCgAdFiEEn8CYb8M8xPhGO959/BvSZiwg80EFAmfpekEACgkQ/BvSZiwg
+80G54hAAwSLFypUQSUZc3ctmILvwDYTkM7VVf/nz+IqcjCoivvx4c+OyXFD/40u7
+9FbVt9QDejm+GFPwk0jHvYeZASvFWxezxNi1TP0T9v2Ze3EB1Q723wphphBA1DqZ
+rdddI4Vbc1gOVlOmmgtjBVWlR3LW9+cbYilFTg3DGqVd2GxleGtrgT85NMfgKxCq
+5fmt/f3M/dEnm/YEUJMVNnvnWXh6Gd9ip5iz6JewoDNOv0Rsxpj2049pfv/usZzu
+gYKsCvZN0tjCOug1e/VppjtxHbXO0wl6pG6KrO8SIC8b9NXxpMZ3qudkhqjR5DNp
+dXCjQxDM6ccTN2O6cwDEUp8URjis82XFbjJIJuEtPb39FEYRk8jJS7SnsD8uBOc8
+Z3RD8dn6gbisHGLqY0n9fF/yrwMtSDlRp1tyR7EjIa8QsA/QAnG7G1eANyc6E9hP
+s0X0gQsx7J3dJx+EFljDMPAKL79s3dEN0pgqUpwBAZZOVxzn1WcUPF6jckIGiQyM
+wRlAfdRFLiAFhmPLgRri1Y8KjXsrr0VRUUEYErRYB4CQM5uzjhdCj0YizS4F9217
+YIrHevqc0suaS6HEvWz4DPa4MZL9S/91Dfw5kmGvtkY1aJL98SAK8UdVzFcXuKo7
+p2iGgg/OBauMMiOew7CVGWMxLIS0E1UFrxLYhA6w7v9EWsc3IPc=
+=eJBq
+-----END PGP SIGNATURE-----

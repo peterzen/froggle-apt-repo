@@ -1,0 +1,5 @@
+Archive: bookworm
+Component: non-free
+Origin: Debian
+Label: Debian
+Architecture: amd64

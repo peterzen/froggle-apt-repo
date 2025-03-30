@@ -1,0 +1,5 @@
+Archive: bookworm
+Component: contrib
+Origin: Debian
+Label: Debian
+Architecture: amd64

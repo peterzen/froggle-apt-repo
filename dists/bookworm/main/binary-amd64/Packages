@@ -1,0 +1,13 @@
+Package: froggle-certs
+Version: 1.5
+Architecture: all
+Maintainer: user <user@froggle.org>
+Priority: optional
+Section: utils
+Filename: pool/main/f/froggle-certs/froggle-certs_1.5_all.deb
+Size: 2816
+SHA256: 84819bef18a5d206d98b94fcdf87c5a02cc2f10df283a9c46bb2bc4b4013cb94
+SHA1: 7969fbfdc285239b88a3190d2fa67e10c8814ee3
+MD5sum: 5e7650d9dbfe3ba95edfa5ee574f4ab7
+Description: FROGGLE CA certs
+
