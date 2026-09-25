@@ -26,39 +26,77 @@ jobs:
         run: |
           apt-get update
           apt-get install -y --no-install-recommends \
-            build-essential debhelper config-package-dev lintian apt-utils gnupg
+            build-essential debhelper config-package-dev
 
       - name: Build packages
         run: scripts/build-packages.sh
-
-      - name: Lintian
-        run: lintian --fail-on error out/*.deb
-
-      - name: Import signing key
-        if: github.event_name != 'pull_request'
-        env:
-          APT_SIGNING_KEY: ${{ secrets.APT_SIGNING_KEY }}
-        run: printf '%s\n' "$APT_SIGNING_KEY" | gpg --batch --import
-
-      - name: Build repository
-        if: github.event_name != 'pull_request'
-        env:
-          SIGNING_KEY_ID: ${{ vars.APT_SIGNING_KEY_ID }}
-        run: scripts/build-repo.sh
 
       - uses: actions/upload-artifact@v4
         with:
           name: debs
           path: out/*.deb
 
+  test:
+    needs: build
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        release: [bookworm, trixie]
+    container: debian:${{ matrix.release }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: debs
+          path: out
+
+      - name: Install test tools
+        run: |
+          apt-get update
+          apt-get install -y --no-install-recommends lintian openssl
+
+      - name: Lintian
+        run: lintian --fail-on error out/*.deb
+
+      - name: Install and purge
+        run: scripts/test-install.sh
+
+  publish:
+    if: github.event_name != 'pull_request'
+    needs: test
+    runs-on: ubuntu-latest
+    container: debian:bookworm
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: debs
+          path: out
+
+      - name: Install repo tools
+        run: |
+          apt-get update
+          apt-get install -y --no-install-recommends apt-utils gnupg
+
+      - name: Import signing key
+        env:
+          APT_SIGNING_KEY: ${{ secrets.APT_SIGNING_KEY }}
+        run: printf '%s\n' "$APT_SIGNING_KEY" | gpg --batch --import
+
+      - name: Build repository
+        env:
+          SIGNING_KEY_ID: ${{ vars.APT_SIGNING_KEY_ID }}
+        run: scripts/build-repo.sh
+
       - uses: actions/upload-pages-artifact@v3
-        if: github.event_name != 'pull_request'
         with:
           path: public
 
   deploy:
-    if: github.event_name != 'pull_request'
-    needs: build
+    needs: publish
     runs-on: ubuntu-latest
     permissions:
       pages: write

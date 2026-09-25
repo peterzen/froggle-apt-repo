@@ -11,7 +11,9 @@ sudo apt install froggle-ca froggle-ws
 ```
 
 `install.sh` puts the signing key in `/etc/apt/keyrings/froggle.asc` and writes
-`/etc/apt/sources.list.d/froggle.sources` (suite `froggle`, component `main`).
+`/etc/apt/sources.list.d/froggle.sources`, using the machine's Debian codename
+as the suite. Supported: `bookworm`, `trixie`. On anything else (e.g. Ubuntu)
+pick one explicitly: `curl ... | sudo SUITE=trixie sh`.
 
 ## Packages
 
@@ -28,8 +30,9 @@ packages/<name>/          one native debhelper source package per directory
   debian/                 control, changelog, rules, maintainer scripts
   ...                     payload (installed via debian/<name>.install)
 scripts/build-packages.sh builds packages/* into out/*.deb
+scripts/test-install.sh   installs out/*.deb, checks them, purges (CI, per release)
 scripts/build-repo.sh     turns out/*.deb into a signed repo in public/
-.github/workflows/        builds on every PR; deploys to Pages on master
+.github/workflows/        build → test on bookworm + trixie → publish to Pages (master only)
 ```
 
 Files under `/etc` are automatically marked as conffiles, so local edits
@@ -39,13 +42,21 @@ Ubuntu's `libgtk-3-0t64` ships `/etc/gtk-3.0/settings.ini`), ship it as
 [config-package-dev](https://debathena.mit.edu/config-package-dev/) diverts the
 original and puts it back on removal.
 
+## Releases
+
+Every package is `Architecture: all` and built once (in `debian:bookworm`), so
+all suites share one pool and list the same packages. To add a release, add it
+to `CODENAMES` in `scripts/build-repo.sh`, the `case` in `install.sh` and the
+test matrix in the workflow. If a package ever needs to differ per release,
+build it per release and give each suite its own pool.
+
 ## Adding or changing a package
 
 1. Edit files under `packages/<name>/` (for a new package, copy an existing one).
 2. Bump the version: `dch -v <new-version> -D stable "what changed"` in the
    package dir (or edit `debian/changelog` by hand). apt only upgrades when the
    version goes up.
-3. Open a PR. CI builds and lints it; merging to `master` publishes.
+3. Commit to `master`. CI builds, tests on every release and publishes.
 
 Local build (Debian/Ubuntu with `debhelper config-package-dev apt-utils`):
 
