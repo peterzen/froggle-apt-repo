@@ -20,7 +20,7 @@ jobs:
     # client can read (Ubuntu's defaults to zstd).
     container: debian:bookworm
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Install build tools
         run: |
@@ -31,7 +31,7 @@ jobs:
       - name: Build packages
         run: scripts/build-packages.sh
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: debs
           path: out/*.deb
@@ -45,9 +45,9 @@ jobs:
         release: [bookworm, trixie]
     container: debian:${{ matrix.release }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v8
         with:
           name: debs
           path: out
@@ -69,9 +69,9 @@ jobs:
     runs-on: ubuntu-latest
     container: debian:bookworm
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v8
         with:
           name: debs
           path: out
@@ -96,7 +96,7 @@ jobs:
           SIGNING_KEY_ID: ${{ vars.APT_SIGNING_KEY_ID }}
         run: scripts/build-repo.sh
 
-      - uses: actions/upload-pages-artifact@v3
+      - uses: actions/upload-pages-artifact@v5
         with:
           path: public
 
@@ -111,7 +111,7 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
       - name: Summary
         run: |
           {

@@ -46,6 +46,5 @@ done
 # Public key + client setup script, served next to the repo.
 $GPG --armor --export ${SIGNING_KEY_ID:-} > froggle.asc
 cp "$ROOT/install.sh" install.sh
-touch .nojekyll
 
 find . -type f | sort
