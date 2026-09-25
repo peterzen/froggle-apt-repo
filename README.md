@@ -95,18 +95,44 @@ Debian releases can't read. CI builds in `debian:bookworm`, which uses xz.
 
 ## One-time setup
 
-1. Create a dedicated signing key (no passphrase, since CI uses it):
-   ```sh
-   gpg --quick-gen-key "FROGGLE apt repo <peter@froggle.org>" ed25519 sign 5y
-   gpg --armor --export-secret-keys <KEYID>   # -> secret APT_SIGNING_KEY
-   ```
-2. Repo settings → Secrets and variables → Actions: add secret
-   `APT_SIGNING_KEY` and variable `APT_SIGNING_KEY_ID`.
-3. Repo settings → Pages → Source: **GitHub Actions**.
-4. Settings → Environments → `github-pages`: allow deployments from `master`.
+Run the key steps on a trusted machine. A throwaway `GNUPGHOME` keeps the CI
+key out of your personal keyring.
 
-The public key is published as `froggle.asc` next to the repo. Rotating the key
-means re-running `install.sh` on clients.
+1. Create a dedicated signing key. It has no passphrase because CI has to use
+   it unattended; the GitHub secret is what protects it.
+   ```sh
+   export GNUPGHOME=$(mktemp -d)
+   gpg --batch --passphrase '' --quick-gen-key \
+       "FROGGLE apt repository <peter@froggle.org>" ed25519 sign 5y
+   FPR=$(gpg --list-keys --with-colons | awk -F: '/^fpr/{print $10; exit}')
+   echo "$FPR"
+   ```
+2. Store it in GitHub: repo **Settings → Secrets and variables → Actions**.
+   - **Secrets** tab → *New repository secret*: name `APT_SIGNING_KEY`, value
+     the output of `gpg --armor --export-secret-keys "$FPR"` (the whole block,
+     including the `-----BEGIN/END PGP PRIVATE KEY BLOCK-----` lines).
+   - **Variables** tab → *New repository variable*: name
+     `APT_SIGNING_KEY_ID`, value `$FPR`.
+3. Back up the key offline (password manager or encrypted drive), then delete
+   the local copy:
+   ```sh
+   gpg --armor --export-secret-keys "$FPR" > froggle-apt-signing-key.asc
+   cp "$GNUPGHOME/openpgp-revocs.d/$FPR.rev" .   # revocation certificate
+   rm -rf "$GNUPGHOME"
+   ```
+4. **Settings → Pages → Build and deployment → Source: GitHub Actions.**
+5. Run the workflow: **Actions → apt repo → Run workflow** (or push to
+   `master`). The `github-pages` environment is created on the first deploy
+   and allows `master` by default.
+6. Check: `https://peterzen.github.io/froggle-apt-repo/froggle.asc` should
+   serve the public key, then run the install command above on a client.
+
+The public key is published as `froggle.asc` next to the repo. The key expires
+after 5 years; to extend it, import the backup, run
+`gpg --quick-set-expire "$FPR" 5y`, update the secret and redeploy; clients
+pick up the new expiry on their next `install.sh` run (or fetch `froggle.asc`
+into `/etc/apt/keyrings/`). A new key means re-running `install.sh` on every
+client.
 
 ## Limitations
 
