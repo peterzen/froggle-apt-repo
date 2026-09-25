@@ -20,7 +20,6 @@ pick one explicitly: `curl ... | sudo SUITE=trixie sh`.
 | package | contents |
 |---|---|
 | `froggle-ca` | FROGGLE CA certs in `/usr/local/share/ca-certificates/froggle/`; runs `update-ca-certificates` |
-| `froggle-certs` | transitional package for hosts that have the old `froggle-certs` 1.5 (use `apt full-upgrade`) |
 | `froggle-ws` | system-wide dark mode: GTK 3/4, GNOME/libadwaita, Xfce, Qt 5/6 (see below) |
 
 ### froggle-ws: dark mode

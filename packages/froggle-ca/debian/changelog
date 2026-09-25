@@ -1,5 +1,5 @@
-froggle-ca (2.0) stable; urgency=medium
+froggle-ca (1.0) stable; urgency=medium
 
-  * Rename froggle-certs to froggle-ca; build with debhelper.
+  * Initial release.
 
  -- peterzen <peter@froggle.org>  Fri, 25 Sep 2026 21:32:30 +0000
