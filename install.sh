@@ -19,6 +19,10 @@ case "$SUITE" in
         ;;
 esac
 
+# Remove what the old install.sh set up (raw.githubusercontent.com source and
+# a globally trusted key); that source no longer exists and breaks apt update.
+rm -f /etc/apt/sources.list.d/froggle.list /etc/apt/trusted.gpg.d/froggle-apt.gpg
+
 install -d -m 0755 /etc/apt/keyrings
 curl -fsSL "$REPO_URL/froggle.asc" -o "$KEYRING"
 chmod 0644 "$KEYRING"
