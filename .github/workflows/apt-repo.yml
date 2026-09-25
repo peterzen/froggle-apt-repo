@@ -84,7 +84,12 @@ jobs:
       - name: Import signing key
         env:
           APT_SIGNING_KEY: ${{ secrets.APT_SIGNING_KEY }}
-        run: printf '%s\n' "$APT_SIGNING_KEY" | gpg --batch --import
+        run: |
+          if [ -z "$APT_SIGNING_KEY" ]; then
+            echo "::error::Secret APT_SIGNING_KEY is not set (see README, One-time setup)"
+            exit 1
+          fi
+          printf '%s\n' "$APT_SIGNING_KEY" | gpg --batch --import
 
       - name: Build repository
         env:
