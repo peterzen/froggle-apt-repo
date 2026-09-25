@@ -1,16 +1,21 @@
 #!/bin/sh
+# Add the FROGGLE apt repository to this machine.
+# Usage: curl -fsSL https://peterzen.github.io/froggle-apt-repo/install.sh | sudo sh
+set -eu
 
+REPO_URL=${REPO_URL:-https://peterzen.github.io/froggle-apt-repo}
+KEYRING=/etc/apt/keyrings/froggle.asc
 
-REPO_URL=https://raw.githubusercontent.com/peterzen/froggle-apt-repo/master
-APT_KEY=/etc/apt/trusted.gpg.d/froggle-apt.gpg
+install -d -m 0755 /etc/apt/keyrings
+curl -fsSL "$REPO_URL/froggle.asc" -o "$KEYRING"
+chmod 0644 "$KEYRING"
 
-sudo apt-get install -y wget software-properties-common
+cat > /etc/apt/sources.list.d/froggle.sources <<SRC
+Types: deb
+URIs: $REPO_URL
+Suites: froggle
+Components: main
+Signed-By: $KEYRING
+SRC
 
-# Download the GPG key in binary format (dearmored)
-wget -O- "$REPO_URL/pubkey.asc" | gpg --dearmor | sudo tee "$APT_KEY" > /dev/null
-
-# Ensure correct permissions
-sudo chmod 644 "$APT_KEY"
-
-echo "deb [signed-by=$APT_KEY] $REPO_URL bookworm main" | sudo tee /etc/apt/sources.list.d/froggle.list
-sudo apt update
+apt-get update

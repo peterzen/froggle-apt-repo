@@ -1,0 +1,5 @@
+# update-ca-certificates only picks up certs from /usr/local/share/ca-certificates
+# without editing /etc/ca-certificates.conf. (Tag names differ between lintian versions.)
+froggle-ca: dir-in-usr-local *
+froggle-ca: file-in-usr-local *
+froggle-ca: file-in-unusual-dir [usr/local/share/ca-certificates/*]

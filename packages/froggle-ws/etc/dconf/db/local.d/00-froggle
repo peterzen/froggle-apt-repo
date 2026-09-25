@@ -1,0 +1,7 @@
+# Installed by froggle-ws; compiled by `dconf update` (run from postinst).
+# These are defaults: users can still change them unless locked in
+# /etc/dconf/db/local.d/locks/.
+[org/gnome/desktop/interface]
+color-scheme='prefer-dark'
+gtk-theme='Adwaita'
+icon-theme='Adwaita'

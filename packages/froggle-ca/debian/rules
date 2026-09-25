@@ -1,0 +1,7 @@
+#!/usr/bin/make -f
+%:
+	dh $@
+
+# dh_usrlocal only allows empty dirs in /usr/local, but update-ca-certificates
+# needs the .crt files there.
+override_dh_usrlocal:

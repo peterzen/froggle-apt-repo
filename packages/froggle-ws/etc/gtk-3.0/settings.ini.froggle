@@ -1,0 +1,7 @@
+# Installed by froggle-ws (diverts the distro copy). Used by GTK apps when no settings daemon
+# (gnome-settings-daemon / xsettingsd) overrides it; GNOME uses dconf below.
+[Settings]
+gtk-application-prefer-dark-theme=true
+gtk-theme-name=Adwaita
+gtk-icon-theme-name=Adwaita
+gtk-font-name=Cantarell 11

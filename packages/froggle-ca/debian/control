@@ -1,0 +1,21 @@
+Source: froggle-ca
+Section: misc
+Priority: optional
+Maintainer: peterzen <peter@froggle.org>
+Build-Depends: debhelper-compat (= 13)
+Standards-Version: 4.6.2
+Rules-Requires-Root: no
+
+Package: froggle-ca
+Architecture: all
+Depends: ca-certificates, ${misc:Depends}
+Description: FROGGLE internal CA certificates
+ Installs the FROGGLE root and infrastructure CA certificates into the
+ system trust store (update-ca-certificates).
+
+Package: froggle-certs
+Architecture: all
+Section: oldlibs
+Depends: froggle-ca, ${misc:Depends}
+Description: transitional package for froggle-ca
+ This is a transitional package. It can safely be removed.

@@ -1,0 +1,12 @@
+#!/bin/sh
+set -e
+
+# The .crt files are gone at this point; --fresh drops their dangling
+# symlinks from /etc/ssl/certs (a plain run leaves them behind).
+if [ "$1" = "remove" ] || [ "$1" = "purge" ]; then
+    if command -v update-ca-certificates >/dev/null 2>&1; then
+        update-ca-certificates --fresh
+    fi
+fi
+
+#DEBHELPER#

@@ -1,0 +1,7 @@
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: froggle-ws
+
+Files: *
+Copyright: 2025 peterzen <peter@froggle.org>
+License: other
+ Internal use.

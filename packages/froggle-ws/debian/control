@@ -1,0 +1,18 @@
+Source: froggle-ws
+Section: x11
+Priority: optional
+Maintainer: peterzen <peter@froggle.org>
+Build-Depends: debhelper-compat (= 13), config-package-dev
+Standards-Version: 4.6.2
+Rules-Requires-Root: no
+
+Package: froggle-ws
+Architecture: all
+Depends: ${misc:Depends}
+Provides: ${diverted-files}
+Conflicts: ${diverted-files}
+Recommends: dconf-cli
+Suggests: qt5-gtk-platformtheme, qt6-gtk-platformtheme
+Description: FROGGLE workstation desktop defaults (GTK/Qt)
+ System-wide GTK 3/4 settings, GNOME dconf defaults and Qt environment
+ so Qt applications follow the GTK theme.
