@@ -1,0 +1,4 @@
+# GNOME, libadwaita and xdg-desktop-portal-gtk read these defaults.
+[org.gnome.desktop.interface]
+color-scheme='prefer-dark'
+gtk-theme='Adwaita-dark'

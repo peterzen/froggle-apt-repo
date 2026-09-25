@@ -1,7 +1,5 @@
-# Installed by froggle-ws (diverts the distro copy). Used by GTK apps when no settings daemon
-# (gnome-settings-daemon / xsettingsd) overrides it; GNOME uses dconf below.
+# Installed by froggle-ws (diverts the distro copy). Used by plain GTK 4 apps
+# (built-in theme, dark variant); libadwaita apps follow
+# org.gnome.desktop.interface color-scheme instead.
 [Settings]
 gtk-application-prefer-dark-theme=true
-gtk-theme-name=Default
-gtk-icon-theme-name=Adwaita
-gtk-font-name=Cantarell 11

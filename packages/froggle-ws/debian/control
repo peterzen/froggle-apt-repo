@@ -8,11 +8,19 @@ Rules-Requires-Root: no
 
 Package: froggle-ws
 Architecture: all
-Depends: ${misc:Depends}
+Depends: gnome-themes-extra,
+         adwaita-icon-theme,
+         greybird-gtk-theme,
+         gsettings-desktop-schemas,
+         qt5ct,
+         qt6ct,
+         qt5-gtk-platformtheme,
+         qt6-gtk-platformtheme,
+         ${misc:Depends}
+Recommends: xdg-desktop-portal-gtk
 Provides: ${diverted-files}
 Conflicts: ${diverted-files}
-Recommends: dconf-cli
-Suggests: qt5-gtk-platformtheme, qt6-gtk-platformtheme
-Description: FROGGLE workstation desktop defaults (GTK/Qt)
- System-wide GTK 3/4 settings, GNOME dconf defaults and Qt environment
- so Qt applications follow the GTK theme.
+Description: FROGGLE workstation desktop defaults (dark mode)
+ System-wide dark defaults for GTK 3/4 (settings.ini), GNOME and libadwaita
+ (gsettings color-scheme), Xfce (Adwaita-dark, Greybird-dark window
+ borders) and Qt 5/6 (qt5ct/qt6ct with the "darker" palette).

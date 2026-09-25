@@ -1,3 +1,16 @@
+froggle-ws (1.1) stable; urgency=medium
+
+  * Dark mode everywhere:
+    - GTK 3/4 settings.ini: Adwaita-dark / prefer-dark.
+    - GNOME/libadwaita: gsettings override (color-scheme prefer-dark)
+      replaces the dconf profile and database.
+    - Xfce: divert xsettings.xml (ThemeName Adwaita-dark), xfwm4
+      Greybird-dark.
+    - Qt 5/6: QT_QPA_PLATFORMTHEME=qt5ct with qt5ct/qt6ct defaults using the
+      darker palette; depend on qt5ct, qt6ct and the gtk platform themes.
+
+ -- peterzen <peter@froggle.org>  Fri, 25 Sep 2026 22:25:28 +0000
+
 froggle-ws (1.0) stable; urgency=medium
 
   * Initial release.

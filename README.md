@@ -21,7 +21,33 @@ pick one explicitly: `curl ... | sudo SUITE=trixie sh`.
 |---|---|
 | `froggle-ca` | FROGGLE CA certs in `/usr/local/share/ca-certificates/froggle/`; runs `update-ca-certificates` |
 | `froggle-certs` | transitional package for hosts that have the old `froggle-certs` 1.5 (use `apt full-upgrade`) |
-| `froggle-ws` | system-wide GTK 3/4 `settings.ini`, GNOME dconf defaults, `QT_QPA_PLATFORMTHEME=gtk3` |
+| `froggle-ws` | system-wide dark mode: GTK 3/4, GNOME/libadwaita, Xfce, Qt 5/6 (see below) |
+
+### froggle-ws: dark mode
+
+| toolkit / desktop | how | file |
+|---|---|---|
+| GTK 3 | `Adwaita-dark` + prefer-dark (no settings daemon) | `/etc/gtk-3.0/settings.ini` (diverted) |
+| GTK 4 | prefer-dark (built-in theme's dark variant) | `/etc/gtk-4.0/settings.ini` (diverted) |
+| GNOME, libadwaita, portal | `color-scheme='prefer-dark'`, `gtk-theme='Adwaita-dark'` | `/usr/share/glib-2.0/schemas/60_froggle-ws.gschema.override` |
+| Xfce | `Net/ThemeName=Adwaita-dark` (Debian's defaults otherwise) | `/etc/xdg/xfce4/xfconf/xfce-perchannel-xml/xsettings.xml` (diverted) |
+| xfwm4 | `Greybird-dark` window borders | `/etc/xdg/xfce4/xfconf/xfce-perchannel-xml/xfwm4.xml` |
+| Qt 5 / Qt 6 | `QT_QPA_PLATFORMTHEME=qt5ct` (outside Plasma); Fusion + qt5ct/qt6ct `darker` palette, GTK file dialogs | `/etc/profile.d/froggle-qt.sh`, `/etc/xdg/qt5ct/qt5ct.conf`, `/etc/xdg/qt6ct/qt6ct.conf` |
+
+Why Qt needs extra packages: Qt only follows a desktop's colours through a
+*platform theme* plugin, and on anything but Plasma none is installed by
+default, so Qt apps fall back to a light Fusion palette. The gtk3 plugin
+(`qt6-gtk-platformtheme`) copies GTK's colours only from Qt 6.5 on (trixie has
+6.8, bookworm 6.4), and Qt 5's never does. qt5ct/qt6ct work on both releases
+and for Qt 5 and 6, so froggle-ws depends on `qt5ct`, `qt6ct` and
+`qt5-gtk-platformtheme`/`qt6-gtk-platformtheme` (for GTK file dialogs).
+
+The Xfce and Qt setup follows what Kali's
+[kali-themes](https://gitlab.com/kalilinux/packages/kali-themes) package does.
+
+These are defaults: settings a user has already changed in Xfce, GNOME or
+qt5ct/qt6ct win. qt5ct/qt6ct copy the system file into `~/.config` only when a
+user has no config yet.
 
 ## Layout
 

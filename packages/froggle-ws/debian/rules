@@ -1,6 +1,10 @@
 #!/usr/bin/make -f
 # config-package-dev diverts files listed in debian/*.displace, so we can
 # replace config files owned by other packages (e.g. Ubuntu's libgtk-3-0
-# ships /etc/gtk-3.0/settings.ini).
+# ships /etc/gtk-3.0/settings.ini, xfce4-settings ships xsettings.xml).
 %:
 	dh $@ --with config-package
+
+# Above desktop-base (10) and the usual distro defaults.
+override_dh_installgsettings:
+	dh_installgsettings --priority=60
