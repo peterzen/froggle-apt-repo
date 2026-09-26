@@ -1,9 +1,13 @@
 #!/bin/sh
 set -e
 
-# The .crt files are gone at this point; --fresh drops their dangling
-# symlinks from /etc/ssl/certs (a plain run leaves them behind).
+CONF=/etc/ca-certificates.conf
+
 if [ "$1" = "remove" ] || [ "$1" = "purge" ]; then
+    if [ -f "$CONF" ]; then
+        sed -i '\|^!\?froggle/|d' "$CONF"
+    fi
+    # --fresh drops the removed certs' dangling links from /etc/ssl/certs.
     if command -v update-ca-certificates >/dev/null 2>&1; then
         update-ca-certificates --fresh
     fi

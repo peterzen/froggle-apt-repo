@@ -1,1 +1,1 @@
-certs/*.crt usr/local/share/ca-certificates/froggle/
+certs/*.crt usr/share/ca-certificates/froggle/

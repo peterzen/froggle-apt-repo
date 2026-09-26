@@ -19,8 +19,22 @@ pick one explicitly: `curl ... | sudo SUITE=trixie sh`.
 
 | package | contents |
 |---|---|
-| `froggle-ca` | FROGGLE CA certs in `/usr/local/share/ca-certificates/froggle/`; runs `update-ca-certificates` |
+| `froggle-ca` | FROGGLE CA certs in `/usr/share/ca-certificates/froggle/`, enabled in `/etc/ca-certificates.conf` (see below) |
 | `froggle-ws` | system-wide dark mode: GTK 3/4, GNOME/libadwaita, Xfce, Qt 5/6 (see below) |
+
+### froggle-ca: where the certs go
+
+Nothing is installed under `/usr/local`: on Qubes, AppVMs keep their own
+`/usr/local`, so a template's copy would never reach them. Certs under
+`/usr/share/ca-certificates` are only trusted when listed in
+`/etc/ca-certificates.conf`, so the postinst replaces every `froggle/` line
+there (including `!`-disabled ones) with one per shipped cert and runs
+`update-ca-certificates`; postrm removes them again. ca-certificates keeps
+these lines across its upgrades, reinstalls and `dpkg-reconfigure`; the only
+way it disables them is when it is configured after our files are unpacked but
+before our postinst runs with `trust_new_crts` not set to `yes`, and our postinst
+then re-enables them. An admin who deselects them in `dpkg-reconfigure
+ca-certificates` gets them back on the next froggle-ca upgrade.
 
 ### froggle-ws: dark mode
 

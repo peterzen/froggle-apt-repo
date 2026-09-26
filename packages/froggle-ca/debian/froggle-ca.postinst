@@ -1,8 +1,21 @@
 #!/bin/sh
 set -e
 
+# Certs under /usr/share/ca-certificates are only trusted when listed in
+# /etc/ca-certificates.conf. Everything under froggle/ is ours: drop any
+# existing entries, enabled or "!"-disabled (ca-certificates writes "!" if it
+# is configured after our files are unpacked but before this runs and
+# trust_new_crts is not "yes"), then list every cert we ship.
+CONF=/etc/ca-certificates.conf
+
 if [ "$1" = "configure" ]; then
-    update-ca-certificates --fresh
+    touch "$CONF"
+    sed -i '\|^!\?froggle/|d' "$CONF"
+    for crt in /usr/share/ca-certificates/froggle/*.crt; do
+        [ -e "$crt" ] || continue
+        echo "froggle/${crt##*/}" >> "$CONF"
+    done
+    update-ca-certificates
 fi
 
 #DEBHELPER#

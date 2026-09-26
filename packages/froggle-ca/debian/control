@@ -11,4 +11,5 @@ Architecture: all
 Depends: ca-certificates, ${misc:Depends}
 Description: FROGGLE internal CA certificates
  Installs the FROGGLE root and infrastructure CA certificates into the
- system trust store (update-ca-certificates).
+ system trust store: /usr/share/ca-certificates/froggle/, enabled in
+ /etc/ca-certificates.conf.
