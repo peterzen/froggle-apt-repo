@@ -1,0 +1,22 @@
+Source: froggle-qubes-keepassxc-wrapper
+Section: utils
+Priority: optional
+Maintainer: peterzen <peter@froggle.org>
+Build-Depends: debhelper-compat (= 13)
+Standards-Version: 4.6.2
+Rules-Requires-Root: no
+
+Package: froggle-qubes-keepassxc-wrapper
+Architecture: all
+Depends: ${misc:Depends}
+Recommends: qubes-core-agent-qrexec
+Description: KeePassXC-Browser over Qubes qrexec
+ Lets the KeePassXC-Browser extension in a Qubes qube talk to KeePassXC in
+ another qube (the vault) via the custom.KeePassXC qrexec service. Installs
+ the keepassxc-proxy-qrexec wrapper and system-wide native messaging
+ manifests (org.keepassxc.keepassxc_browser) for Firefox, Chromium, Brave and
+ Google Chrome. Install it in the browser qube's template.
+ .
+ The vault qube's name is set in /etc/default/keepassxc-proxy-qrexec. The
+ vault side (qrexec service running keepassxc-proxy) and the dom0 policy for
+ custom.KeePassXC are not part of this package.

@@ -1,0 +1,3 @@
+# Qube running KeePassXC, as passed to qrexec-client-vm. dom0 policy for
+# custom.KeePassXC must allow this qube to call it.
+KEEPASSXC_VAULT=vault

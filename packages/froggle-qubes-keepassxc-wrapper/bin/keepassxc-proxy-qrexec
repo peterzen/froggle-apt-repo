@@ -1,0 +1,10 @@
+#!/bin/sh
+# Native messaging host for KeePassXC-Browser: forwards the browser's stdio
+# to KeePassXC in the vault qube via the custom.KeePassXC qrexec service.
+# The browser passes the manifest path / extension ID as arguments; they are
+# not needed here.
+KEEPASSXC_VAULT=vault
+if [ -r /etc/default/keepassxc-proxy-qrexec ]; then
+    . /etc/default/keepassxc-proxy-qrexec
+fi
+exec qrexec-client-vm "$KEEPASSXC_VAULT" custom.KeePassXC

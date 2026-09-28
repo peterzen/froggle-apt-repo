@@ -1,0 +1,2 @@
+bin/keepassxc-proxy-qrexec usr/bin/
+etc/default/keepassxc-proxy-qrexec etc/default/

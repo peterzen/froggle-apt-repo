@@ -48,10 +48,32 @@ grep -q '^color-scheme=.prefer-dark.' /usr/share/glib-2.0/schemas/*froggle-ws.gs
     || fail "no gsettings override"
 (. /etc/profile.d/froggle-qt.sh; [ "$QT_QPA_PLATFORMTHEME" = qt5ct ]) || fail "Qt env not set"
 
+# froggle-qubes-keepassxc-wrapper: manifests point at the wrapper, and the
+# wrapper runs qrexec-client-vm (faked here) against the configured vault.
+HOST=org.keepassxc.keepassxc_browser.json
+for m in /usr/lib/mozilla/native-messaging-hosts/$HOST \
+         /etc/chromium/native-messaging-hosts/$HOST \
+         /etc/opt/chrome/native-messaging-hosts/$HOST; do
+    grep -q '"path": "/usr/bin/keepassxc-proxy-qrexec"' "$m" || fail "$m missing or wrong"
+done
+fake=$(mktemp -d)
+printf '#!/bin/sh\necho "$@"\n' > "$fake/qrexec-client-vm"
+chmod +x "$fake/qrexec-client-vm"
+[ "$(PATH="$fake:$PATH" keepassxc-proxy-qrexec /manifest ext-id)" = "vault custom.KeePassXC" ] \
+    || fail "wrapper does not call qrexec-client-vm vault custom.KeePassXC"
+sed -i 's/^KEEPASSXC_VAULT=.*/KEEPASSXC_VAULT=pw-vault/' /etc/default/keepassxc-proxy-qrexec
+[ "$(PATH="$fake:$PATH" keepassxc-proxy-qrexec)" = "pw-vault custom.KeePassXC" ] \
+    || fail "wrapper ignores /etc/default/keepassxc-proxy-qrexec"
+
 pkgs=$(for d in out/*.deb; do dpkg-deb -f "$d" Package; done)
 apt-get purge -y $pkgs
 
 ! ls /etc/ssl/certs | grep -qi froggle || fail "cert links left in /etc/ssl/certs"
+for f in /usr/bin/keepassxc-proxy-qrexec /etc/default/keepassxc-proxy-qrexec \
+         /usr/lib/mozilla/native-messaging-hosts/$HOST \
+         /etc/chromium/native-messaging-hosts/$HOST /etc/opt/chrome/native-messaging-hosts/$HOST; do
+    [ ! -e "$f" ] || fail "$f left after purge"
+done
 ! grep -q 'froggle/' /etc/ca-certificates.conf || fail "entries left in ca-certificates.conf"
 for crt in packages/froggle-ca/certs/*.crt; do
     ! trusted "$crt" || fail "${crt##*/} still trusted after purge"

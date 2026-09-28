@@ -1,0 +1,5 @@
+# Google Chrome only reads system-wide native messaging manifests from
+# /etc/opt/chrome/native-messaging-hosts (hard-coded in Chrome).
+froggle-qubes-keepassxc-wrapper: dir-or-file-in-etc-opt *
+# Called by browsers, not by users.
+froggle-qubes-keepassxc-wrapper: no-manual-page [usr/bin/keepassxc-proxy-qrexec]

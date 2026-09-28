@@ -21,6 +21,7 @@ pick one explicitly: `curl ... | sudo SUITE=trixie sh`.
 |---|---|
 | `froggle-ca` | FROGGLE CA certs in `/usr/share/ca-certificates/froggle/`, enabled in `/etc/ca-certificates.conf` (see below) |
 | `froggle-ws` | system-wide dark mode: GTK 3/4, GNOME/libadwaita, Xfce, Qt 5/6 (see below) |
+| `froggle-qubes-keepassxc-wrapper` | KeePassXC-Browser in a Qubes browser qube, talking to KeePassXC in a vault qube over qrexec (see below) |
 
 ### froggle-ca: where the certs go
 
@@ -35,6 +36,30 @@ way it disables them is when it is configured after our files are unpacked but
 before our postinst runs with `trust_new_crts` not set to `yes`, and our postinst
 then re-enables them. An admin who deselects them in `dpkg-reconfigure
 ca-certificates` gets them back on the next froggle-ca upgrade.
+
+### froggle-qubes-keepassxc-wrapper
+
+Install in the browser qube's **template**; every AppVM based on it gets:
+
+| file | purpose |
+|---|---|
+| `/usr/bin/keepassxc-proxy-qrexec` | native messaging host: `exec qrexec-client-vm "$KEEPASSXC_VAULT" custom.KeePassXC` |
+| `/etc/default/keepassxc-proxy-qrexec` | `KEEPASSXC_VAULT=vault` (name of the KeePassXC qube) |
+| `/usr/lib/mozilla/native-messaging-hosts/org.keepassxc.keepassxc_browser.json` | Firefox |
+| `/etc/chromium/native-messaging-hosts/org.keepassxc.keepassxc_browser.json` | Chromium, Brave |
+| `/etc/opt/chrome/native-messaging-hosts/org.keepassxc.keepassxc_browser.json` | Google Chrome |
+
+The extension IDs are the ones KeePassXC itself writes
+([`NativeMessageInstaller.cpp`](https://github.com/keepassxreboot/keepassxc/blob/develop/src/browser/NativeMessageInstaller.cpp)).
+The system directories come from the browsers' sources; Brave builds without
+Chrome branding, so it uses Chromium's `/etc/chromium` directory.
+
+Not included: the `custom.KeePassXC` qrexec service in the vault qube and the
+dom0 policy allowing the browser qube to call it. A per-user manifest with the
+same name (e.g. from enabling browser integration in a KeePassXC running in the
+browser qube) takes precedence over these, so don't. Debian's keepassxc
+packages ship no system-wide manifests, so one template can serve both the
+vault and the browser qubes. Restart the browser after installing.
 
 ### froggle-ws: dark mode
 
