@@ -8,6 +8,7 @@ a signed apt repository to GitHub Pages.
 ```sh
 curl -fsSL https://peterzen.github.io/froggle-apt-repo/install.sh | sudo sh
 sudo apt install froggle-ca froggle-ws
+sudo apt install froggle-qubes-keepassxc-wrapper   # Qubes browser qube's template
 ```
 
 `install.sh` puts the signing key in `/etc/apt/keyrings/froggle.asc` and writes
