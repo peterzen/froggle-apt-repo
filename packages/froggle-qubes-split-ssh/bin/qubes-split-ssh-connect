@@ -1,0 +1,6 @@
+#!/bin/sh
+# Forwards one SSH agent connection (stdio, from qubes-split-ssh@.service) to
+# the vault qube's qubes.SshAgent qrexec service.
+# Optional per-AppVM override: put a vault name in /rw/config/split-ssh-vault
+VAULT="$(cat /rw/config/split-ssh-vault 2>/dev/null)"
+exec qrexec-client-vm "${VAULT:-@default}" qubes.SshAgent

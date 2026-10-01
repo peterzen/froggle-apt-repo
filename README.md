@@ -9,6 +9,7 @@ a signed apt repository to GitHub Pages.
 curl -fsSL https://peterzen.github.io/froggle-apt-repo/install.sh | sudo sh
 sudo apt install froggle-ca froggle-ws
 sudo apt install froggle-qubes-keepassxc-wrapper   # Qubes browser qube's template
+sudo apt install froggle-qubes-split-ssh           # Qubes AppVM template, for split SSH
 ```
 
 `install.sh` puts the signing key in `/etc/apt/keyrings/froggle.asc` and writes
@@ -23,6 +24,7 @@ pick one explicitly: `curl ... | sudo SUITE=trixie sh`.
 | `froggle-ca` | FROGGLE CA certs in `/usr/share/ca-certificates/froggle/`, enabled in `/etc/ca-certificates.conf` (see below) |
 | `froggle-ws` | system-wide dark mode: GTK 3/4, GNOME/libadwaita, Xfce, Qt 5/6 (see below) |
 | `froggle-qubes-keepassxc-wrapper` | KeePassXC-Browser in a Qubes browser qube, talking to KeePassXC in a vault qube over qrexec (see below) |
+| `froggle-qubes-split-ssh` | split SSH in Qubes AppVMs: an agent socket that forwards to ssh-agent in a vault qube over qrexec (see below) |
 
 ### froggle-ca: where the certs go
 
@@ -61,6 +63,102 @@ same name (e.g. from enabling browser integration in a KeePassXC running in the
 browser qube) takes precedence over these, so don't. Debian's keepassxc
 packages ship no system-wide manifests, so one template can serve both the
 vault and the browser qubes. Restart the browser after installing.
+
+### froggle-qubes-split-ssh
+
+Install in the AppVM's **template**; every AppVM based on it gets an SSH
+agent socket that forwards each connection to the vault qube's
+`qubes.SshAgent` qrexec service. The package does the steps below, so there
+is nothing to set up by hand except the vault side and the dom0 policy (not
+included). Restart the AppVMs after installing.
+
+| file | purpose |
+|---|---|
+| `/usr/bin/qubes-split-ssh-connect` | connect helper: `exec qrexec-client-vm "${VAULT:-@default}" qubes.SshAgent` |
+| `/usr/lib/systemd/user/qubes-split-ssh.socket` | per-user socket `%t/qubes-split-ssh.sock`, enabled for all users |
+| `/usr/lib/systemd/user/qubes-split-ssh@.service` | runs the helper for each connection |
+| `/etc/ssh/ssh_config.d/50-qubes-split-ssh.conf` | `IdentityAgent /run/user/%i/qubes-split-ssh.sock` |
+| `/etc/environment.d/50-qubes-split-ssh.conf` | `SSH_AUTH_SOCK=${XDG_RUNTIME_DIR}/qubes-split-ssh.sock` |
+
+The helper and units live under `/usr` rather than `/usr/local` and
+`/etc/systemd/user`: on Qubes, AppVMs keep their own `/usr/local`, so a
+template's copy would never reach them, and `/etc/systemd/user` is left for
+local overrides.
+
+**Connect helper** (`/usr/bin/qubes-split-ssh-connect`):
+
+```sh
+#!/bin/sh
+# Optional per-AppVM override: put a vault name in /rw/config/split-ssh-vault
+VAULT="$(cat /rw/config/split-ssh-vault 2>/dev/null)"
+exec qrexec-client-vm "${VAULT:-@default}" qubes.SshAgent
+```
+
+With no override file, `@default` lets the dom0 policy pick the target.
+That's why `default_target=vault` in your policy line matters, e.g. in dom0's
+`/etc/qubes/policy.d/30-user.policy`:
+
+```
+qubes.SshAgent  *  @anyvm  @anyvm  ask default_target=vault
+```
+
+To use a different vault in one AppVM, write its name to
+`/rw/config/split-ssh-vault` in that AppVM (`/rw` persists across reboots).
+
+**Socket** (`qubes-split-ssh.socket`):
+
+```ini
+[Unit]
+Description=Split SSH agent socket
+
+[Socket]
+ListenStream=%t/qubes-split-ssh.sock
+SocketMode=0600
+Accept=yes
+
+[Install]
+WantedBy=sockets.target
+```
+
+**Service** (`qubes-split-ssh@.service`):
+
+```ini
+[Unit]
+Description=Split SSH agent connection
+
+[Service]
+ExecStart=/usr/bin/qubes-split-ssh-connect
+StandardInput=socket
+StandardOutput=socket
+StandardError=journal
+```
+
+Here `%t` is the user runtime directory, so the socket ends up at
+`/run/user/1000/qubes-split-ssh.sock`. The package enables the socket for all
+users on install (the equivalent of
+`sudo systemctl --global enable qubes-split-ssh.socket`) and disables it again
+on purge.
+
+**SSH** (`/etc/ssh/ssh_config.d/50-qubes-split-ssh.conf`):
+
+```
+IdentityAgent /run/user/%i/qubes-split-ssh.sock
+```
+
+`%i` is the local user's numeric ID. Debian and Fedora both include
+`ssh_config.d/*.conf` by default, but check that `/etc/ssh/ssh_config` has the
+`Include` line on your template. This covers `ssh`, `scp`, `git` and
+non-interactive `qvm-run` use without any shell setup.
+
+**Session environment** (`/etc/environment.d/50-qubes-split-ssh.conf`), for
+other agent clients that only look at `SSH_AUTH_SOCK` (e.g. `ssh-add -l`):
+
+```
+SSH_AUTH_SOCK=${XDG_RUNTIME_DIR}/qubes-split-ssh.sock
+```
+
+Not included: the `qubes.SshAgent` qrexec service in the vault qube (which
+connects to its ssh-agent) and the dom0 policy above.
 
 ### froggle-ws: dark mode
 

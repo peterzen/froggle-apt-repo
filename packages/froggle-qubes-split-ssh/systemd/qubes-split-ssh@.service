@@ -1,0 +1,8 @@
+[Unit]
+Description=Split SSH agent connection
+
+[Service]
+ExecStart=/usr/bin/qubes-split-ssh-connect
+StandardInput=socket
+StandardOutput=socket
+StandardError=journal

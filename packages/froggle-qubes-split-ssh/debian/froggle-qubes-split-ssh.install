@@ -1,0 +1,5 @@
+bin/qubes-split-ssh-connect usr/bin/
+systemd/qubes-split-ssh.socket usr/lib/systemd/user/
+systemd/qubes-split-ssh@.service usr/lib/systemd/user/
+etc/ssh/ssh_config.d/50-qubes-split-ssh.conf etc/ssh/ssh_config.d/
+etc/environment.d/50-qubes-split-ssh.conf etc/environment.d/

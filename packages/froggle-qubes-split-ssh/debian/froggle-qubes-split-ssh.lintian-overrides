@@ -1,0 +1,2 @@
+# Started by qubes-split-ssh@.service, not by users.
+froggle-qubes-split-ssh: no-manual-page [usr/bin/qubes-split-ssh-connect]

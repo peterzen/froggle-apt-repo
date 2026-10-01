@@ -65,14 +65,34 @@ sed -i 's/^KEEPASSXC_VAULT=.*/KEEPASSXC_VAULT=pw-vault/' /etc/default/keepassxc-
 [ "$(PATH="$fake:$PATH" keepassxc-proxy-qrexec)" = "pw-vault custom.KeePassXC" ] \
     || fail "wrapper ignores /etc/default/keepassxc-proxy-qrexec"
 
+# froggle-qubes-split-ssh: socket enabled for all users, ssh and the session
+# pointed at it, and the helper calls qrexec-client-vm (faked above) with
+# @default unless the AppVM names a vault in /rw/config/split-ssh-vault.
+SOCKET_WANT=/etc/systemd/user/sockets.target.wants/qubes-split-ssh.socket
+[ -L "$SOCKET_WANT" ] || fail "qubes-split-ssh.socket not enabled globally"
+grep -qx 'IdentityAgent /run/user/%i/qubes-split-ssh.sock' \
+    /etc/ssh/ssh_config.d/50-qubes-split-ssh.conf || fail "ssh IdentityAgent not set"
+grep -qx 'SSH_AUTH_SOCK=${XDG_RUNTIME_DIR}/qubes-split-ssh.sock' \
+    /etc/environment.d/50-qubes-split-ssh.conf || fail "SSH_AUTH_SOCK not set"
+[ "$(PATH="$fake:$PATH" qubes-split-ssh-connect)" = "@default qubes.SshAgent" ] \
+    || fail "split-ssh helper does not call qrexec-client-vm @default qubes.SshAgent"
+mkdir -p /rw/config
+echo ssh-vault > /rw/config/split-ssh-vault
+[ "$(PATH="$fake:$PATH" qubes-split-ssh-connect)" = "ssh-vault qubes.SshAgent" ] \
+    || fail "split-ssh helper ignores /rw/config/split-ssh-vault"
+rm -rf /rw
+
 pkgs=$(for d in out/*.deb; do dpkg-deb -f "$d" Package; done)
 apt-get purge -y $pkgs
 
 ! ls /etc/ssl/certs | grep -qi froggle || fail "cert links left in /etc/ssl/certs"
 for f in /usr/bin/keepassxc-proxy-qrexec /etc/default/keepassxc-proxy-qrexec \
          /usr/lib/mozilla/native-messaging-hosts/$HOST \
-         /etc/chromium/native-messaging-hosts/$HOST /etc/opt/chrome/native-messaging-hosts/$HOST; do
-    [ ! -e "$f" ] || fail "$f left after purge"
+         /etc/chromium/native-messaging-hosts/$HOST /etc/opt/chrome/native-messaging-hosts/$HOST \
+         /usr/bin/qubes-split-ssh-connect /usr/lib/systemd/user/qubes-split-ssh.socket \
+         /usr/lib/systemd/user/qubes-split-ssh@.service "$SOCKET_WANT" \
+         /etc/ssh/ssh_config.d/50-qubes-split-ssh.conf /etc/environment.d/50-qubes-split-ssh.conf; do
+    [ ! -e "$f" ] && [ ! -L "$f" ] || fail "$f left after purge"
 done
 ! grep -q 'froggle/' /etc/ca-certificates.conf || fail "entries left in ca-certificates.conf"
 for crt in packages/froggle-ca/certs/*.crt; do

@@ -1,0 +1,5 @@
+#!/usr/bin/make -f
+# dh_installsystemduser enables qubes-split-ssh.socket for all users
+# (like systemctl --global enable) and disables it again on purge.
+%:
+	dh $@

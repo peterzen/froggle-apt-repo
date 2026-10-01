@@ -1,0 +1,10 @@
+[Unit]
+Description=Split SSH agent socket
+
+[Socket]
+ListenStream=%t/qubes-split-ssh.sock
+SocketMode=0600
+Accept=yes
+
+[Install]
+WantedBy=sockets.target

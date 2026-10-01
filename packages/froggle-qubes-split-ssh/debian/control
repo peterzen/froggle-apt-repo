@@ -1,0 +1,23 @@
+Source: froggle-qubes-split-ssh
+Section: utils
+Priority: optional
+Maintainer: peterzen <peter@froggle.org>
+Build-Depends: debhelper-compat (= 13)
+Standards-Version: 4.6.2
+Rules-Requires-Root: no
+
+Package: froggle-qubes-split-ssh
+Architecture: all
+Depends: ${misc:Depends}
+Recommends: qubes-core-agent-qrexec
+Description: split SSH agent for Qubes AppVMs over qrexec
+ Lets ssh, scp, git and other SSH agent clients in a Qubes AppVM use keys
+ held by ssh-agent in another qube (the vault) via the qubes.SshAgent qrexec
+ service. Installs a systemd user socket at
+ $XDG_RUNTIME_DIR/qubes-split-ssh.sock, enabled for all users, that forwards
+ each connection with qrexec-client-vm, and points ssh (IdentityAgent) and
+ SSH_AUTH_SOCK at it. Install it in the AppVM's template.
+ .
+ By default the dom0 policy picks the vault (@default); an AppVM can name one
+ in /rw/config/split-ssh-vault. The vault side (qubes.SshAgent service) and
+ the dom0 policy are not part of this package.
